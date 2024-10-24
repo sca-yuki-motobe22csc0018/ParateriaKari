@@ -9,9 +9,6 @@ public class StageSpawner : MonoBehaviour
     public int[] stageProbability;
     public int stageAmount;
     public Vector3 spawnPosition;
-    public float spawnPointX;
-    public float spawnPointY;
-    public float spawnPointZ;
     public string RespawnTag;
     public string LineTag;
     public string StagePrefab;
