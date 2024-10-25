@@ -8,9 +8,15 @@ public class PlayerMove : MonoBehaviour
     //Rigidbody
     private Rigidbody rb;
 
+    //GameController
+    public GameObject gc;
+    GameController gameController;
+
     //位置関係
     public float DefaultPosition;
     public float PlayerSpeed;
+    float BackSpeed;
+    public  float BackSpeedPlus;
     public float EndPositionY;
     //デバック用
     public float StartPositionY;
@@ -59,6 +65,8 @@ public class PlayerMove : MonoBehaviour
         JumpCoolTimer = 0;
         DamageTrigger = true;
         thisHP = StartHP;
+        gameController = FindObjectOfType<GameController>();
+        
         /*
             for (int i = 0; i < MAXHP; i++)
             {
@@ -74,6 +82,7 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        BackSpeed= BackSpeedPlus + gameController.StageSpeed;
         if (Jump)
         {
             JumpCoolTimer += Time.deltaTime;
@@ -88,14 +97,22 @@ public class PlayerMove : MonoBehaviour
         {
             JumpAction();
         }
-        if (this.transform.position.x < DefaultPosition)
+        if (!onWall)
         {
-            this.transform.position += new Vector3(PlayerSpeed * Time.deltaTime, 0, 0);
+            if (this.transform.position.x < DefaultPosition)
+            {
+                this.transform.position += new Vector3(PlayerSpeed * Time.deltaTime, 0, 0);
+            }
+            if (this.transform.position.x > DefaultPosition)
+            {
+                this.transform.position -= new Vector3(PlayerSpeed * Time.deltaTime, 0, 0);
+            }
         }
-        if (this.transform.position.x > DefaultPosition)
+        else
         {
-            this.transform.position -= new Vector3(PlayerSpeed * Time.deltaTime, 0, 0);
+            this.transform.position -= new Vector3(BackSpeed * Time.deltaTime, 0, 0);
         }
+        
         if (Rota)
         {
             PlayerSkin.transform.Rotate(0, 0, -RotaSpeed * Time.deltaTime);
@@ -132,6 +149,7 @@ public class PlayerMove : MonoBehaviour
         if (other.gameObject.CompareTag(WallTag))
         {
             onWall = true;
+            Debug.Log("Wall");
         }
         if (other.gameObject.CompareTag(EnemyTag))
         {

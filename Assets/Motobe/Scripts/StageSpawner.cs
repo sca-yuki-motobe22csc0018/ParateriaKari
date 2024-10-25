@@ -35,9 +35,10 @@ public class StageSpawner : MonoBehaviour
         GameObject Stage = Instantiate(Stage_prefab, pos, Quaternion.identity);
         return;
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag(RespawnTag))
+        if (other.gameObject.CompareTag(RespawnTag))
         {
             int Rand = Random.Range(0, spawnRandom);
             for (int i = 0; i < stageAmount; i++)
@@ -49,11 +50,11 @@ public class StageSpawner : MonoBehaviour
                     break;
                 }
             }
-            Destroy(collision.gameObject);
+            Destroy(other.gameObject);
         }
-        if (collision.gameObject.CompareTag(LineTag))
+        if (other.gameObject.CompareTag(LineTag))
         {
-            Destroy(collision.gameObject);
+            Destroy(other.gameObject);
         }
     }
 }
